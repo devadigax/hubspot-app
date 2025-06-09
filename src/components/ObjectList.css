@@ -1,0 +1,25 @@
+.object-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.object-list-item {
+  cursor: pointer;
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  background-color: transparent;
+  transition: background-color 0.2s;
+}
+
+.object-list-item:hover {
+  background-color: #ffffff9b; /* white */
+}
+
+.object-list-item.selected {
+  background-color: #ffffff4f; /* white */
+}
+.object-list {
+  max-height: calc(100vh - 150px); /* adjust if needed */
+  overflow-y: auto;
+}

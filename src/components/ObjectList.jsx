@@ -1,16 +1,14 @@
-export default function ObjectList({ items, onSelect }) {
+import './ObjectList.css';
+
+export default function ObjectList({ items, onSelect, selectedId }) {
   if (!items.length) return <div>No items found.</div>;
 
   return (
-    <ul style={{ listStyle: 'none', padding: 0 }}>
+    <ul className="object-list">
       {items.map(item => (
         <li
           key={item.id}
-          style={{
-            cursor: 'pointer',
-            padding: '8px',
-            borderBottom: '1px solid #ddd',
-          }}
+          className={`object-list-item ${item.id === selectedId ? 'selected' : ''}`}
           onClick={() => onSelect(item)}
         >
           {item.properties.firstname

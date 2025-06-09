@@ -19,26 +19,35 @@ const hubspot = axios.create({
   },
 });
 
-// Utility to fetch paginated objects
-async function fetchObjects(objectType, limit = 20, after) {
-  const params = { limit };
-  if (after) params.after = after;
-
-  // Set properties to fetch for each object type
+// Utility to fetch paginated objects sorted by createdate DESC using Search API
+async function fetchObjects(objectType, limit = 100, after) {
+  // properties to fetch per object type
   const propsMap = {
-    contacts: ['firstname', 'lastname', 'email'],
-    companies: ['name', 'industry', 'website'],
-    deals: ['dealname', 'amount', 'dealstage'],
+    contacts: ['firstname', 'lastname', 'email', 'country', 'phone', 'jobtitle', 'company', 'industry', 'createdate'],
+    companies: ['name', 'industry', 'website', 'phone', 'address', 'city', 'state', 'zip', 'country', 'createdate'],
+    deals: ['dealname', 'amount', 'dealstage', 'closedate', 'createdate', 'pipeline', 'hs_lastmodifieddate'],
   };
-  params.properties = propsMap[objectType]?.join(',') || '';
 
-  const response = await hubspot.get(`/${objectType}`, { params });
+  const properties = propsMap[objectType] || [];
+
+  const body = {
+    limit,
+    sorts: [{ propertyName: 'createdate', direction: 'DESCENDING' }],
+    properties,
+  };
+
+  if (after) {
+    body.after = after;
+  }
+
+  // Use POST /search endpoint to support sorting
+  const response = await hubspot.post(`/${objectType}/search`, body);
   return response.data;
 }
 
 app.get('/api/:objectType', async (req, res) => {
   const { objectType } = req.params;
-  const { limit = 20, after } = req.query;
+  const { limit = 100, after } = req.query;
 
   if (!['contacts', 'companies', 'deals'].includes(objectType)) {
     return res.status(400).json({ error: 'Invalid object type' });
@@ -52,6 +61,25 @@ app.get('/api/:objectType', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch data' });
   }
 });
+
+// Endpoint to create new objects
+app.post('/api/:objectType', async (req, res) => {
+  const { objectType } = req.params;
+  const data = req.body;
+
+  if (!['contacts', 'companies', 'deals'].includes(objectType)) {
+    return res.status(400).json({ error: 'Invalid object type' });
+  }
+
+  try {
+    const response = await hubspot.post(`/${objectType}`, { properties: data });
+    res.status(201).json(response.data);
+  } catch (error) {
+    console.error(error.response?.data || error.message);
+    res.status(500).json({ error: 'Failed to create object' });
+  }
+});
+
 
 app.listen(PORT, () => {
   console.log(`Backend server running on http://localhost:${PORT}`);

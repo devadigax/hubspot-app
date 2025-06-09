@@ -16,17 +16,16 @@ A simple full-stack React + Node.js app to view HubSpot CRM **Contacts**, **Comp
 ## Project Structure
 
 hubspot-app/  
-├── backend/  
-│   ├── server.js           # Express backend server  
-│   └── .env                # Environment variables (HubSpot token)  
 ├── src/  
 │   ├── App.jsx             # Main React component  
-│   ├── components/  
+│   ├── components/
 │   │   ├── ObjectList.jsx  
 │   │   └── ObjectDetail.jsx  
 │   └── ...  
 ├── vite.config.js          # Vite config with proxy to backend  
-├── package.json  
+├── package.json
+├── server.js               # Express backend server  
+├── .env                    # Environment variables (HubSpot token)  
 └── README.md  
 
 ---
@@ -48,33 +47,32 @@ HUBSPOT_API_TOKEN=your_hubspot_private_app_token_here
 PORT=3001
 ```
 
-####  Install backend dependencies and start server:
+- Install backend dependencies and start server:
 
-```
+```bash
 cd backend
 npm install express cors dotenv axios
 node server.js
 ```
-The backend runs on http://localhost:3001
+
+- The backend runs on http://localhost:3001
 
 ### 3. Setup Frontend
 
 From root folder:
-```
+
+```bash
 npm install
 npm run dev
 ```
 
-The frontend runs on http://localhost:3000 and proxies API requests to backend.
+- The frontend runs on http://localhost:3000 and proxies API requests to backend.
 
-###  4. Use the App
-Open http://localhost:3000
-
-Click on Contacts, Companies, or Deals tabs
-
-Browse paginated lists
-
-Click an item to view its details
+### 4. Use the App
+- Open http://localhost:3000
+- Click on Contacts, Companies, or Deals tabs
+- Browse paginated lists
+- Click an item to view its details
 
 ## Scripts
 
@@ -88,20 +86,19 @@ Click an item to view its details
 
 Run both backend and frontend simultaneously with:
 
-```
+```bash
 npm run start
 ```
+
 ## Dependencies
 Backend: Express, Axios, dotenv, CORS
 
 Frontend: React, Vite
 
-##  Notes
-HubSpot API uses cursor-based pagination with after tokens.
-
-Pagination currently supports only the Next Page button.
-
-You can extend the app by adding Previous Page support or authentication if needed.
+## Notes
+- HubSpot API uses cursor-based pagination with after tokens.
+- Pagination currently supports only the Next Page button.
+- You can extend the app by adding Previous Page support or authentication if needed.
 
 ### License
-MIT © Devadigax
+MIT © Devadigax 2025

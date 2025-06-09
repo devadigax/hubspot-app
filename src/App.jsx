@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import ObjectList from './components/ObjectList';
 import ObjectDetail from './components/ObjectDetail';
+import CreateObject from './components/CreateObject';
+import './App.css';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('contacts');
   const [items, setItems] = useState([]);
   const [paging, setPaging] = useState(null);
   const [selectedObject, setSelectedObject] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const fetchItems = (after = null) => {
-    let url = `/api/${activeTab}?limit=20`;
+    setLoading(true);
+    setError(null);
+
+    let url = `/api/${activeTab}?limit=100`;
     if (after) url += `&after=${after}`;
 
     fetch(url)
@@ -19,11 +26,14 @@ export default function App() {
         setPaging(data.paging || null);
         setSelectedObject(null);
       })
-      .catch(() => {
+      .catch(err => {
+        console.error(err);
         setItems([]);
         setPaging(null);
         setSelectedObject(null);
-      });
+        setError('Failed to load data.');
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -31,40 +41,41 @@ export default function App() {
   }, [activeTab]);
 
   return (
-    <div style={{ padding: 20 }}>
-      <nav style={{ marginBottom: 20 }}>
+    <div className="app-container">
+      <nav className="tab-nav">
         {['contacts', 'companies', 'deals'].map(tab => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            style={{
-              marginRight: 10,
-              padding: '8px 16px',
-              backgroundColor: tab === activeTab ? '#007bff' : '#eee',
-              color: tab === activeTab ? 'white' : 'black',
-              border: 'none',
-              borderRadius: 4,
-              cursor: 'pointer',
-            }}
+            className={`tab-button ${tab === activeTab ? 'active' : ''}`}
           >
             {tab.charAt(0).toUpperCase() + tab.slice(1)}
           </button>
         ))}
       </nav>
 
-      <div style={{ display: 'flex' }}>
-        <div style={{ flex: 1, maxWidth: 300, overflowY: 'auto', borderRight: '1px solid #ccc', paddingRight: 10 }}>
-          <ObjectList items={items} onSelect={setSelectedObject} />
-          <div style={{ marginTop: 10 }}>
-            {paging?.next ? (
-              <button onClick={() => fetchItems(paging.next.after)}>Load Next Page</button>
-            ) : (
-              <span>No more items</span>
-            )}
-          </div>
+      <div className="main-content">
+        <div className="list-panel">
+          <CreateObject objectType={activeTab} onCreated={() => fetchItems()} />
+
+          {loading && <p>Loading...</p>}
+          {error && <p className="error">{error}</p>}
+
+          {!loading && !error && (
+            <>
+              <ObjectList items={items} onSelect={setSelectedObject} selectedId={selectedObject?.id} />
+              <div className="pagination">
+                {paging?.next ? (
+                  <button onClick={() => fetchItems(paging.next.after)}>Load Next Page</button>
+                ) : (
+                  <span>No more items</span>
+                )}
+              </div>
+            </>
+          )}
         </div>
 
-        <div style={{ flex: 2, paddingLeft: 20 }}>
+        <div className="detail-panel">
           <ObjectDetail item={selectedObject} />
         </div>
       </div>
