@@ -1,4 +1,4 @@
-/* Existing styles */
+/* Root layout */
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -6,51 +6,15 @@
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
-/* New styles for layout */
+/* Primary app layout */
 .app-container {
   text-align: left;
 }
 
+/* Tab Navigation */
 .tab-nav {
   margin-bottom: 20px;
 }
-
 .tab-button {
   margin-right: 10px;
   padding: 8px 16px;
@@ -60,25 +24,17 @@
   border-radius: 4px;
   cursor: pointer;
 }
-
 .tab-button.active {
   background-color: #007bff;
   color: white;
 }
 
+/* Main Content Area */
 .main-content {
   display: flex;
   flex-wrap: wrap;
 }
-
-/* Make .list-panel flexible and wide enough */
-.list-panel {
-  width: 100%;
-  max-width: 400px; /* Increase this if needed */
-  padding: 1rem;
-  box-sizing: border-box;
-}
-
+/* Details Panel */
 .detail-panel {
   flex: 2;
   width: 65%;
@@ -86,11 +42,88 @@
   overflow-y: auto;
   height: 100%;
 }
-
-.pagination {
-  margin-top: 10px;
-}
-
 .error {
   color: red;
+}
+
+/* Table Styles for Data */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+  background: #f7faff;
+  font-size: 1rem;
+}
+th, td {
+  border: 1px solid #e2e8f0;
+  padding: 8px 12px;
+  text-align: left;
+  color: #222;
+  background: inherit;
+}
+th {
+  background-color: #eaf4fb;
+  font-weight: 600;
+  color: #333;
+}
+tr:nth-child(even) td {
+  background-color: #f3f7fb;
+}
+tr:hover td {
+  background-color: #e0eefa;
+}
+
+/* Details Block for Entity Results */
+.deal-details,
+.company-details,
+.contact-details,
+.lineitem-details {
+  margin-top: 30px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px #0001;
+  padding: 20px;
+}
+
+h3 {
+  margin-top: 1em;
+  margin-bottom: 0.4em;
+  color: #1a3363;
+  font-weight: 600;
+}
+
+.null-value {
+  color: #bbb;
+  font-style: italic;
+}
+
+/* Form Styling */
+form {
+  margin-bottom: 1.5em;
+  display: flex;
+  gap: 10px;
+}
+input[type="text"] {
+  padding: 8px 12px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  font-size: 1rem;
+  width: 240px;
+}
+button[type="submit"] {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+button[type="submit"]:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+button[type="submit"]:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
